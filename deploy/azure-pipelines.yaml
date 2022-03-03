@@ -19,7 +19,7 @@ variables:
   - name: backendServiceArm
     value: 'scaadautomationtf'
   - name: backendAzureRmResourceGroupName
-    value: 'eshop-gbb-rg'
+    value: 'eshop-gbb-sto-rg'
   - name: backendAzureRmStorageAccountName
     value: 'eshopgbbsto001'
   - name: backendAzureRmContainerName

@@ -19,9 +19,9 @@ variables:
   - name: backendServiceArm
     value: 'scaadautomationtf'
   - name: backendAzureRmResourceGroupName
-    value: 'rg-storages-yrhpwc'
+    value: 'eshop-gbb-rg'
   - name: backendAzureRmStorageAccountName
-    value: 'sttfstateyrhpwc001'
+    value: 'eshopgbbsto001'
   - name: backendAzureRmContainerName
     value: 'aksdeployazuredevops'
   - name: backendAzureRmKey

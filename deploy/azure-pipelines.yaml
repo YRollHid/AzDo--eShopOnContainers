@@ -1,0 +1,95 @@
+name: $(BuildDefinitionName)_$(date:yyyyMMdd)$(rev:.r)
+
+trigger: none
+
+pr: none
+
+parameters:
+
+  - name: Action
+    displayName: Action
+    type: string
+    default: 'Plan'
+    values:
+    - Plan
+    - Apply
+    - Destroy
+
+variables:
+  - name: backendServiceArm
+    value: 'scaadautomationtf'
+  - name: backendAzureRmResourceGroupName
+    value: 'rg-storages-yrhpwc'
+  - name: backendAzureRmStorageAccountName
+    value: 'sttfstateyrhpwc001'
+  - name: backendAzureRmContainerName
+    value: 'aksdeployazuredevops'
+  - name: backendAzureRmKey
+    value: 'terraform.tfstate'
+  - name: environment
+    value: 'production'
+  - name: terraform_version
+    value: '1.1.3'
+  - name: action
+    value: ${{ parameters.Action }}
+
+stages :   
+  - stage: terraform_validate
+    condition: ne('${{ parameters.Action }}', 'Destroy')
+    jobs:
+      - template: pipeline-templates/terraform-validate.yaml
+        parameters:
+          backendServiceArm: ${{ variables.backendServiceArm }}
+          backendAzureRmResourceGroupName: ${{ variables.backendAzureRmResourceGroupName }}
+          backendAzureRmStorageAccountName: ${{ variables.backendAzureRmStorageAccountName }}
+          backendAzureRmContainerName: ${{ variables.backendAzureRmContainerName }}
+          backendAzureRmKey: ${{ variables.backendAzureRmKey }}
+          environment: ${{ variables.environment }}
+          terraform_version: ${{ variables.terraform_version }}
+
+  - stage: terraform_plan
+    dependsOn: [terraform_validate]
+    condition: ne('${{ parameters.Action }}', 'Destroy')
+    jobs:
+      - template: pipeline-templates/terraform-plan.yaml
+        parameters:
+          backendServiceArm: ${{ variables.backendServiceArm }}
+          backendAzureRmResourceGroupName: ${{ variables.backendAzureRmResourceGroupName }}
+          backendAzureRmStorageAccountName: ${{ variables.backendAzureRmStorageAccountName }}
+          backendAzureRmContainerName: ${{ variables.backendAzureRmContainerName }}
+          backendAzureRmKey: ${{ variables.backendAzureRmKey }}
+          environment: ${{ variables.environment }}
+          terraform_version: ${{ variables.terraform_version }}
+
+  - stage: terraform_apply
+    dependsOn: [terraform_plan]
+    condition: ne('${{ parameters.Action }}', 'Destroy')
+    jobs:
+      - template: pipeline-templates/terraform-apply.yaml
+        parameters:
+          backendServiceArm: ${{ variables.backendServiceArm }}
+          backendAzureRmResourceGroupName: ${{ variables.backendAzureRmResourceGroupName }}
+          backendAzureRmStorageAccountName: ${{ variables.backendAzureRmStorageAccountName }}
+          backendAzureRmContainerName: ${{ variables.backendAzureRmContainerName }}
+          backendAzureRmKey: ${{ variables.backendAzureRmKey }}
+          environment: ${{ variables.environment }}
+          terraform_version: ${{ variables.terraform_version }}
+
+  # - stage: bootstrap
+  #   dependsOn: [terraform_apply]
+  #   condition: contains('${{ parameters.Action }}', 'Apply') 
+  #   jobs:
+  #     - template: pipeline-templates/az-cli.yaml
+
+  - stage: terraform_destroy
+    condition: contains('${{ parameters.Action }}', 'Destroy')
+    jobs:
+      - template: pipeline-templates/terraform-destroy.yaml
+        parameters:
+          backendServiceArm: ${{ variables.backendServiceArm }}
+          backendAzureRmResourceGroupName: ${{ variables.backendAzureRmResourceGroupName }}
+          backendAzureRmStorageAccountName: ${{ variables.backendAzureRmStorageAccountName }}
+          backendAzureRmContainerName: ${{ variables.backendAzureRmContainerName }}
+          backendAzureRmKey: ${{ variables.backendAzureRmKey }}
+          environment: ${{ variables.environment }}
+          terraform_version: ${{ variables.terraform_version }}

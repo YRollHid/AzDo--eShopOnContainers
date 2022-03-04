@@ -4,21 +4,19 @@ RESOURCE_GROUP=${AKSRG}
 
 # Build Services images
 ROOTPATHSERVICES='src/Services'
-BROOTPATHSERVICES='../../'
 
 # Build & Push Basket-API
-cd $ROOTPATHSERVICES/Basket/Basket.API
 az acr build \
     --resource-group $RESOURCE_GROUP \
     --registry $ACR_NAME \
+    --file $ROOTPATHSERVICES/Basket/Basket.API \
     --image basket-api:${TAG} .
 
 # Build & Push Catalog-API
-cd $BROOTPATHSERVICES
-cd $ROOTPATHSERVICES/Catalog/Catalog.API
 az acr build \
     --resource-group $RESOURCE_GROUP \
     --registry $ACR_NAME \
+    --file $ROOTPATHSERVICES/Catalog/Catalog.API \
     --image catalog-api:${TAG} .
 
 # Verify the images

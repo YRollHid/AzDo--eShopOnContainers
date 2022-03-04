@@ -20,12 +20,12 @@ variables:
   tag: '$(Build.BuildId)'
 
 stages:
-- stage: 'Build'
-  displayName: 'Build'
+- stage: 'AcrBuildPush'
+  displayName: 'Acr Build & Push'
 
   jobs:  
-  - job: 'Build'
-    displayName: 'Build job'
+  - job: 'AcrBuildPush'
+    displayName: 'Acr Build & Push'
     pool:
       vmImage: 'ubuntu-latest'
     steps:

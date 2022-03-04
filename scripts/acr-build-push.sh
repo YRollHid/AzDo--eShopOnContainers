@@ -3,7 +3,7 @@ ACR_NAME=${ACRNAME}
 RESOURCE_GROUP=${AKSRG}
 
 # Build Services images
-ROOTPATHSERVICES='~src/Services'
+ROOTPATHSERVICES='~/src/Services'
 
 # Build & Push Basket-API
 cd $ROOTPATHSERVICES/Basket/Basket.API

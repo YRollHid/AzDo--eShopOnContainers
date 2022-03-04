@@ -9,15 +9,15 @@ ROOTPATHSERVICES='src/Services'
 az acr build \
     --resource-group $RESOURCE_GROUP \
     --registry $ACR_NAME \
-    --file $ROOTPATHSERVICES/Basket/Basket.API \
-    --image basket-api:${TAG} .
+    --file $ROOTPATHSERVICES/Basket/Basket.API/Dockerfile \
+    --image basket-api:${TAG}
 
 # Build & Push Catalog-API
 az acr build \
     --resource-group $RESOURCE_GROUP \
     --registry $ACR_NAME \
-    --file $ROOTPATHSERVICES/Catalog/Catalog.API \
-    --image catalog-api:${TAG} .
+    --file $ROOTPATHSERVICES/Catalog/Catalog.API/Dockerfile \
+    --image catalog-api:${TAG}
 
 # Verify the images
 az acr repository list \

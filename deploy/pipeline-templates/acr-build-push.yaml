@@ -1,0 +1,15 @@
+- stage: 'AcrBuildPush'
+  displayName: 'Acr Build & Push'
+  jobs:
+  - job: 'AcrBuildPush'
+    displayName: 'Acr Build & Push'
+    steps:
+    - task: AzureCLI@2
+      displayName: 'Acr Build & Push'
+      inputs:
+        azureSubscription: '$(azureSC)'
+        scriptType: 'bash'
+        scriptLocation: 'scriptPath'
+        scriptPath: 'scripts/acr-build-push.sh'
+        arguments: ''
+        workingDirectory: '$(System.DefaultWorkingDirectory)'
